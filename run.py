@@ -46,11 +46,15 @@ def returnBal(username):
 	data = block_io.get_address_balance(labels=username)
 	balance = data['data']['balances'][0]['available_balance']
 	pending_balance = data['data']['balances'][0]['pending_received_balance']
+	dgeusd = exchRateDGE()
+	balance_msg = "\nBalance: "+f"{float(balance):,.0f}"+ " Doge" \
+                    f" (US${float(balance)*dgeusd:,.2f})"
 	if float(pending_balance) != 0:
-		pending_msg = "\nPending: "+f"{float(pending_balance):,.0f}"+" Doge"
+		pending_msg = "\nPending: "+f"{float(pending_balance):,.0f}"+" Doge" \
+						f" (US${float(pending_balance)*dgeusd:,.2f})"
 	else:
 		pending_msg = ""
-	return (balance, pending_balance, pending_msg)
+	return (balance, pending_balance, balance_msg, pending_msg)
 
 def process(message,username,chatid):
 	message = message.split(" ")
@@ -65,8 +69,8 @@ def process(message,username,chatid):
 			sendMsg("@"+username+" you are already registered.",chatid)
 	elif "/balance" in message[0]:
 		try:
-			(balance, pending_balance, pending_msg) = returnBal(username)
-			sendMsg("@"+'vindard'+"\nBalance: "+f"{float(balance):,.0f}"+ " Doge"+pending_msg,chatid)
+			(balance, pending_balance, balance_msg, pending_msg) = returnBal()
+			sendMsg("@"+'vindard'+balance_msg+pending_msg,chatid)
 		except:
 			sendMsg("@"+username+" you are not registered yet. use /register to register.",chatid)
 	elif "/tip" in message[0]:
