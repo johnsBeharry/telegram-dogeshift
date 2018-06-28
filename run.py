@@ -115,7 +115,7 @@ def process(message,username,chatid):
 			pass
 
 	elif "/monikers" in message:
-		sendMsg("--MONIKERS--\n" +
+		sendMsg("--MONIKERS--\n\n" +
 			monikers_str,chatid)
 
 	elif "/active" in message:
