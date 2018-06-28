@@ -81,14 +81,18 @@ def process(message,username,chatid):
 	elif "/address" in message[0]:
 		try:
 			data = block_io.get_address_by_label(label=username)
-			sendMsg("@"+username+" your address is "+data['data']['address']+"",chatid)
+			sendMsg("@"+username+" your address is "+data['data']['address']+""+
+					"\nExplore: https://dogechain.info/address/"+data['data']['address']+"",chatid)
 		except:
 			sendMsg("@"+username+" you are not registered yet. use /register to register.",chatid)
 	elif "/withdraw" in message[0]:
 		try:
 			amount = abs(float(message[1]))
 			address = message[2]
-			data = block_io.withdraw_from_labels(amounts=str(amount), from_labels=username, to_addresses=address)
+			data_1 = block_io.withdraw_from_labels(amounts=str(amount), from_labels=username, to_addresses=address)
+			data_2 = block_io.get_address_by_label(label=username)
+			sendMsg("Withdrawal request received. Track progress: " +
+					"https://dogechain.info/address/"+data_2['data']['address'],chatid)
 		except ValueError:
 			sendMsg("@"+username+" invalid amount.",chatid)
 		except:
