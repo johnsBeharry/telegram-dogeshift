@@ -20,6 +20,16 @@ monikers_dict = {n[i]: n[2] for n in monikers_tuple for i in range(2)}
 monikers_flat = [monikers_tuple[i][j] for i in range(len(monikers_tuple)) for j in range(3)]
 monikers_str  = '\n'.join(f"{i[0]}: {i[2]} doge" for i in monikers_tuple)
 
+def exchRateDGE():
+	usdbtc = requests.get('https://blockchain.info/tobtc?currency=USD&value=1')
+	btcusd = 1 / float(usdbtc.text)
+
+	data   = block_io.get_current_price(price_base='BTC')
+	dgebtc = float(data["data"]["prices"][0]["price"])
+	dgeusd = dgebtc * btcusd
+
+	return dgeusd
+
 def getCount(chatid):
 	n = []
 	t = time.time()
