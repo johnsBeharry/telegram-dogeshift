@@ -48,10 +48,10 @@ def returnBal(username):
 	pending_balance = data['data']['balances'][0]['pending_received_balance']
 	dgeusd = exchRateDGE()
 	balance_msg = "\nBalance: "+f"{float(balance):,.0f}"+ " Doge" \
-                    f" (US${float(balance)*dgeusd:,.2f})"
+                    #f" (US${float(balance)*dgeusd:,.2f})"
 	if float(pending_balance) != 0:
 		pending_msg = "\nPending: "+f"{float(pending_balance):,.0f}"+" Doge" \
-						f" (US${float(pending_balance)*dgeusd:,.2f})"
+						#f" (US${float(pending_balance)*dgeusd:,.2f})"
 	else:
 		pending_msg = ""
 	return (balance, pending_balance, balance_msg, pending_msg)
