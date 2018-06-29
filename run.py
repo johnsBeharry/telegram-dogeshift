@@ -30,6 +30,17 @@ def exchRateDGE():
 
 	return dgeusd
 
+def withdrawMsg(dataPassed):
+	if dataPassed['status'] == 'success':
+		return f"Withdrawal successful! Track it's progress here: https://dogechain.info/tx/{dataPassed['data']['txid']}"
+	elif dataPassed['status'] == 'fail':
+		if dataPassed['data']['error_message'].split(' ')[0] == 'Cannot':
+			return f"Sorry, funds are too low. Your maximum withdrawable balance is {float(dataPassed['data']['max_withdrawal_available']):,.0f} Doge.",
+		elif dataPassed['data']['error_message'].split(' ')[0] == 'Invalid':
+			return f"Sorry, '{amount}' is not a valid amount."
+		elif dataPassed['data']['error_message'].split(' ')[0] == 'Destination':
+			return f"Sorry, destination address {address} is invalid."
+
 def getCount(chatid):
 	n = []
 	t = time.time()
@@ -109,8 +120,7 @@ def process(message,username,chatid):
 			address = message[2]
 			data_1 = block_io.withdraw_from_labels(amounts=str(amount), from_labels=username, to_addresses=address)
 			data_2 = block_io.get_address_by_label(label=username)
-			sendMsg("Withdrawal request received. Track progress: " +
-					"https://dogechain.info/address/"+data_2['data']['address'],chatid)
+			sendMsg(withdrawMsg(data_1),chatid)
 		except ValueError:
 			sendMsg("@"+username+" invalid amount.",chatid)
 		except:
