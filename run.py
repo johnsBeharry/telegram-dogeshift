@@ -57,8 +57,6 @@ def returnBal(username):
 
 def process(message,username,chatid):
 	message = msg_parse(message)
-	#for i in range(message.count(' ')):
-	#	message.remove(' ')
 
 	if "/register" in message[0]:
 		try:
