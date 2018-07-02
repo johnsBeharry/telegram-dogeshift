@@ -61,7 +61,7 @@ def returnBal(username):
 	balance_msg = "\nBalance: "+f"{float(balance):,.0f}"+ " Doge" \
                     #f" (US${float(balance)*dgeusd:,.2f})"
 	if float(pending_balance) != 0:
-		pending_msg = "\nPending: "+f"{float(pending_balance):,.0f}"+" Doge" \
+		pending_msg = "\nPending: "+f"{float(pending_balance):,.0f}"+" Doge (not yet added)" \
 						#f" (US${float(pending_balance)*dgeusd:,.2f})"
 	else:
 		pending_msg = ""
