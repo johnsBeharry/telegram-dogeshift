@@ -29,6 +29,23 @@ def getCount(chatid):
 			n.append(i)
 	return n
 
+def msg_parse(string):
+	pattern_call = "^(\/\w+)"
+	pattern_address = "(\w{26,})"
+	pattern_username = "@(\w+)"
+	pattern_amount = "\s(\d+)" if re.search("\s(\d+)", string) else "\s(a[h|n]?)\s"
+	pattern_item = pattern_amount.replace("(","").replace(")","")+"\s*(\w+)"
+	patterns = [pattern_call, pattern_username, pattern_amount, pattern_item, pattern_address]
+
+	results  = []
+	for pattern in patterns:
+		result = re.search(pattern, string)
+		if result:
+			results.append(result.group(1))
+		else:
+			results.append("")
+	return results
+
 def sendMsg(message,chatid):
 	requests.get(url + "sendMessage", data={"chat_id":chatid,"text":message})
 
@@ -39,9 +56,9 @@ def returnBal(username):
 	return (balance, pending_balance)
 
 def process(message,username,chatid):
-	message = message.split(" ")
-	for i in range(message.count(' ')):
-		message.remove(' ')
+	message = msg_parse(message)
+	#for i in range(message.count(' ')):
+	#	message.remove(' ')
 
 	if "/register" in message[0]:
 		try:
@@ -57,8 +74,8 @@ def process(message,username,chatid):
 			sendMsg("@"+username+" you are not registered yet. use /register to register.",chatid)
 	elif "/tip" in message[0]:
 		try:
-			person = message[1].replace('@','')
-			amount_msg = 1 if message[2] in ('a', 'an', '1') else message[2]
+			person = message[1]
+			amount_msg = 1 if 'a' in message[2][0] else message[2]
 			amount = abs(float(amount_msg)) * monikers_dict.get(message[3], 1)
 
 			if monikers_dict.get(message[3], 0) == 0:
@@ -86,8 +103,8 @@ def process(message,username,chatid):
 			sendMsg("@"+username+" you are not registered yet. use /register to register.",chatid)
 	elif "/withdraw" in message[0]:
 		try:
-			amount = abs(float(message[1]))
-			address = message[2]
+			amount = abs(float(message[2]))
+			address = message[4]
 			data = block_io.withdraw_from_labels(amounts=str(amount), from_labels=username, to_addresses=address)
 		except ValueError:
 			sendMsg("@"+username+" invalid amount.",chatid)
@@ -114,11 +131,11 @@ def process(message,username,chatid):
 		except:
 			pass
 
-	elif "/monikers" in message:
+	elif "/monikers" in message[0]:
 		sendMsg("--MONIKERS--\n" +
 			monikers_str,chatid)
 
-	elif "/active" in message:
+	elif "/active" in message[0]:
 		sendMsg("Current active : %d shibes" %(len(getCount(chatid))),chatid)
 	else:
 		global active_users
