@@ -44,6 +44,15 @@ def msg_parse(string):
 			results.append(result.group(1))
 		else:
 			results.append("")
+
+	pattern_allWords = "[^\/]\\b([a-zA-Z]+)\\b"
+	allWords = re.findall(pattern_allWords, message)
+	if results[3] not in monikers_flat:
+		for word in allWords:
+			if word in monikers_flat:
+				results[3] = word
+				break
+
 	return results
 
 def sendMsg(message,chatid):
