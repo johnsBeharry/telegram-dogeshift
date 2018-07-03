@@ -34,8 +34,8 @@ def msg_parse(string):
 	pattern_address = "(\w{26,})"
 	pattern_username = "@(\w+)"
 	pattern_amount = "\s(\d+)" if re.search("\s(\d+)", string) else "\s(a[h|n]?)\s"
-	pattern_item = pattern_amount.replace("(","").replace(")","")+"\s*(\w+)"
-	patterns = [pattern_call, pattern_username, pattern_amount, pattern_item, pattern_address]
+	pattern_moniker = pattern_amount.replace("(","").replace(")","")+"\s*(\w+)"
+	patterns = [pattern_call, pattern_username, pattern_amount, pattern_moniker, pattern_address]
 
 	results  = []
 	for pattern in patterns:
