@@ -96,7 +96,7 @@ def process(message,username,chatid):
 		try:
 			data = block_io.get_address_by_label(label=username)
 			sendMsg("@"+username+" your address is "+data['data']['address']+""+
-					"\nExplore: https://dogechain.info/address/"+data['data']['address']+"",chatid)
+					"\n\nhttps://dogechain.info/address/"+data['data']['address']+"",chatid)
 		except:
 			sendMsg("@"+username+" you are not registered yet. use /register to register.",chatid)
 	elif "/withdraw" in message[0]:
