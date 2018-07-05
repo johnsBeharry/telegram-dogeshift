@@ -20,20 +20,6 @@ monikers_dict = {n[i]: n[2] for n in monikers_tuple for i in range(2)}
 monikers_flat = [monikers_tuple[i][j] for i in range(len(monikers_tuple)) for j in range(3)]
 monikers_str  = '\n'.join(f"{i[0]}: {i[2]} doge" for i in monikers_tuple)
 
-def exchRateDGE():
-	usdbtc = requests.get('https://blockchain.info/tobtc?currency=USD&value=1')
-	btcusd = 1 / float(usdbtc.text)
-
-	try:
-		data = block_io.get_current_price(price_base='BTC')
-	except Exception as error:
-		print(error)
-		data = {"data": {"prices":[{"price": 0}]}}
-	dgebtc = float(data["data"]["prices"][0]["price"])
-	dgeusd = dgebtc * btcusd
-
-	return dgeusd
-
 def withdrawMsg(dataPassed):
 	if dataPassed['status'] == 'success':
 		return f"Withdrawal successful! Track it's progress here: https://dogechain.info/tx/{dataPassed['data']['txid']}"
@@ -61,12 +47,9 @@ def returnBal(username):
 	data = block_io.get_address_balance(labels=username)
 	balance = data['data']['balances'][0]['available_balance']
 	pending_balance = data['data']['balances'][0]['pending_received_balance']
-	dgeusd = exchRateDGE()
 	balance_msg = "\nBalance: "+f"{float(balance):,.0f}"+ " Doge" \
-#                    f" (US${float(balance)*dgeusd:,.2f})"
 	if float(pending_balance) != 0:
 		pending_msg = "\nPending: "+f"{float(pending_balance):,.0f}"+" Doge (not yet added)" \
-#						f" (US${float(pending_balance)*dgeusd:,.2f})"
 	else:
 		pending_msg = ""
 	return (balance, pending_balance, balance_msg, pending_msg)
