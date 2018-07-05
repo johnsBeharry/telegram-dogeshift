@@ -57,7 +57,7 @@ def returnBal(username):
 	data = block_io.get_address_balance(labels=username)
 	balance = data['data']['balances'][0]['available_balance']
 	pending_balance = data['data']['balances'][0]['pending_received_balance']
-	dgeusd = exchRateDGE()
+#	dgeusd = exchRateDGE()
 	balance_msg = "\nBalance: "+f"{float(balance):,.0f}"+ " Doge" \
                     #f" (US${float(balance)*dgeusd:,.2f})"
 	if float(pending_balance) != 0:
