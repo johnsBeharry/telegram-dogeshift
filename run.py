@@ -48,10 +48,8 @@ def returnBal(username):
 	balance = data['data']['balances'][0]['available_balance']
 	pending_balance = data['data']['balances'][0]['pending_received_balance']
 	balance_msg = "\nBalance: "+f"{float(balance):,.0f}"+ " Doge"
-	if float(pending_balance) != 0:
-		pending_msg = "\nPending: "+f"{float(pending_balance):,.0f}"+" Doge (not yet added)"
-	else:
-		pending_msg = ""
+	pending_msg = "\nPending: "+f"{float(pending_balance):,.0f}"+" Doge (not yet added)"
+	pending_msg = "" if float(pending_balance) == 0 else pending_msg
 	return (balance, pending_balance, balance_msg, pending_msg)
 
 def process(message,username,chatid):
