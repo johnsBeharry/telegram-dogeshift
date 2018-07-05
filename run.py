@@ -88,8 +88,6 @@ def process(message,username,chatid):
 			sendMsg("@"+username+" tipped "+ str(amount_msg) + " " + sin_plu +
 					("" if monikers_dict.get(message[3], 0) == 0 else f" ({str(amount)} doge)") +
 					" to @"+person+"",chatid)
-			#(balance, pending_balance) = returnBal(person)
-			#sendMsg("@"+person+" Balance : "+balance+ "Doge ("+pending_balance+" Doge)",chatid)
 		except ValueError:
 			sendMsg("@"+username+" invalid amount.",chatid)
 		except:
