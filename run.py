@@ -2,6 +2,7 @@ import requests
 import time
 from block_io import BlockIo
 import os
+import re
 
 token = os.environ['TELEGRAM_BOT_TOKEN'] #Telegram bot token
 url = "https://api.telegram.org/bot%s/" %(token)
