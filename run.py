@@ -24,7 +24,11 @@ def exchRateDGE():
 	usdbtc = requests.get('https://blockchain.info/tobtc?currency=USD&value=1')
 	btcusd = 1 / float(usdbtc.text)
 
-	data   = block_io.get_current_price(price_base='BTC')
+	try:
+		data = block_io.get_current_price(price_base='BTC')
+	except Exception as error:
+		print(error)
+		data = {"data": {"prices":[{"price": 0}]}}
 	dgebtc = float(data["data"]["prices"][0]["price"])
 	dgeusd = dgebtc * btcusd
 
@@ -57,7 +61,7 @@ def returnBal(username):
 	data = block_io.get_address_balance(labels=username)
 	balance = data['data']['balances'][0]['available_balance']
 	pending_balance = data['data']['balances'][0]['pending_received_balance']
-#	dgeusd = exchRateDGE()
+	dgeusd = exchRateDGE()
 	balance_msg = "\nBalance: "+f"{float(balance):,.0f}"+ " Doge" \
                     #f" (US${float(balance)*dgeusd:,.2f})"
 	if float(pending_balance) != 0:
