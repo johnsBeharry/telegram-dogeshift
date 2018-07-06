@@ -4,10 +4,15 @@ I want ___
 So that ___
 
 
-
-Scenario: Get user balance
-Given a user is registered
-When they type "/balance"
-Then their balance in doge coin will be returned
-
-
+Scenario: Get active users
+Given active_users in a chat session "123"
+"""
+active_users = {
+	"123": {
+		"johnsBeharry": 1530835383.860277,
+		"micey969": 1530835383.860277
+	}
+}
+"""
+When active_users object is passed to getCount
+Then a list of active users is returned 

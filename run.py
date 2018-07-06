@@ -78,7 +78,6 @@ def process(message, username, chatid):
             sendMsg("@" + username + " tipped " + str(amount_msg) + " " + sin_plu +
                     ("" if monikers_dict.get(message[3], 0) == 0 else f" ({str(amount)} doge)") +
                     " to @" + person + "", chatid)
-
             (balance, pending_balance) = returnBal(person)
             sendMsg("@" + person + " Balance : " + balance + "Doge (" + pending_balance + " Doge)", chatid)
         except ValueError:
@@ -139,6 +138,7 @@ def process(message, username, chatid):
 while True:
     try:
         print("such dogeshift. much running.")
+        # get's updates from the bot and decodes it
         data = requests.get(url + "getUpdates", data={"offset": n}).json()
         n = data["result"][0]["update_id"] + 1
         username = data["result"][0]["message"]["from"]['username']
