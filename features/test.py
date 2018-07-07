@@ -1,5 +1,17 @@
 import time
 
+"""
+This function acceppts two parameters; chatid and active_users
+and returns a list of active users in a chat session
+
+Parameters:
+	chatid (int): Id of current chat session 
+	active_users (object): list of users in the chat session
+
+Return:
+	n (list): currently active users
+"""
+
 def getCount(chatid, active_users):
     n = []
     t = time.time()
