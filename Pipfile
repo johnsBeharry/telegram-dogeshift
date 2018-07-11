@@ -4,5 +4,4 @@ python_version = "3.6"
 [packages]
 requests = "*"
 block-io = "*"
-behave = "*"
-crypto = "*"
+

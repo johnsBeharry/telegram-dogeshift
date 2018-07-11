@@ -10,9 +10,10 @@ def step_impl(context, chat_id):
 
 @when(u'active_users object is passed to getCount')
 def step_impl(context):
-	context.response = getCount(int(context.chat_id), context.active_users)
+	context.response = getCount(context.chat_id, context.active_users)
+	print context.response
 
 
 @then(u'a list of active users is returned')
 def step_impl(context):
-	print (context.response)
+	print context.response

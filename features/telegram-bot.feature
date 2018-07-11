@@ -7,7 +7,7 @@ So that ___
 Scenario: Get active users
 Given active_users in a chat session "123"
 """
-active_users = {
+{
 	"123": {
 		"johnsBeharry": 1530835383.860277,
 		"micey969": 1530835383.860277
