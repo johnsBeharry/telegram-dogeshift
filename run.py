@@ -2,6 +2,7 @@ import requests
 import time
 from block_io import BlockIo
 import os
+import utils
 
 token = os.environ['TELEGRAM_BOT_TOKEN']  # Telegram bot token
 url = "https://api.telegram.org/bot%s/" % (token)
@@ -9,6 +10,7 @@ n = 0
 version = 2
 block_io = BlockIo(os.environ['BLOCKIO_API_KEY'], os.environ['BLOCKIO_PIN'], version)
 active_users = {}
+current_time = time.time()
 
 # an array of reward items
 monikers_tuple = [
@@ -20,17 +22,6 @@ monikers_tuple = [
 monikers_dict = {n[i]: n[2] for n in monikers_tuple for i in range(2)}
 monikers_flat = [monikers_tuple[i][j] for i in range(len(monikers_tuple)) for j in range(3)]
 monikers_str = '\n'.join(f"{i[0]}: {i[2]} doge" for i in monikers_tuple)
-
-
-def getCount(chatid):
-    n = []
-    t = time.time()
-    chat_users = active_users[chatid]
-    print(active_users)
-    for i in chat_users:
-        if t - chat_users[i] <= 600:
-            n.append(i)
-    return n
 
 
 def sendMsg(message, chatid):
@@ -102,7 +93,7 @@ def process(message, username, chatid):
 
     elif "/rain" in message[0]:
         try:
-            users = getCount(chatid)
+            users = getActive(chatid, active_users, current_time)
             if username in users:
                 users.remove(username)
             number = len(users)
@@ -125,7 +116,7 @@ def process(message, username, chatid):
                 monikers_str, chatid)
 
     elif "/active" in message:
-        sendMsg("Current active : %d shibes" % (len(getCount(chatid))), chatid)
+        sendMsg("Current active : %d shibes" % (len(getActive(chatid, active_users, current_time))), chatid)
     else:
         global active_users
         try:
