@@ -1,24 +1,20 @@
---- 
+version: 2
 jobs: 
   build: 
     branches: 
       only: 
         - develop
     docker: 
-      - 
-        image: "circleci/python:3.6"
+      - image: "circleci/python:3.6"
+    working_directory: ~/telegram-dogecoin
     steps: 
       - checkout
-      - 
-        command: |
+      - run:
+          name: "install dependencies"
+          command: |
             pip3 install block-io
             pip3 install requests
             pip3 install behave
-        name: "install dependencies"
-        run: ~
-      - 
-        command: "behave\n"
-        name: "run tests"
-        run: ~
-    working_directory: ~/telegram-dogecoin
-version: 2
+      - run:
+          name: "run tests"
+          command: behave
