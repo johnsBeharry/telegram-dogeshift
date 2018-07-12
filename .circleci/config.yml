@@ -1,10 +1,13 @@
 version: 2
 jobs:
   build:
+  	branches:
+      only:
+        - develop
     docker:
       - image: circleci/python:3.6
 
-    working_directory: ~/repo
+    working_directory: ~/telegram-dogecoin
 
     steps:
       - checkout
