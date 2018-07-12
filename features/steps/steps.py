@@ -22,4 +22,4 @@ def step_impl(context):
 @then(u'a list of active users is returned')
 def step_impl(context):
 	context.expected_users = json.loads(context.text)
-	testcase.assertItemsEqual(context.response, context.expected_users)
+	testcase.assertCountEqual(context.response, context.expected_users)
