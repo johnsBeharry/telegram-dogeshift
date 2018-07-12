@@ -12,9 +12,9 @@ jobs:
       - run:
           name: "install dependencies"
           command: |
-            pip3 install block-io
-            pip3 install requests
-            pip3 install behave
+            pip3 install block-io --user
+            pip3 install requests --user
+            pip3 install behave  --user
       - run:
           name: "run tests"
           command: behave
