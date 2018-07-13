@@ -101,11 +101,8 @@ def process(message,username,chatid):
 		try:
 			amount = abs(float(message[1]))
 			address = message[2]
-			data_1 = block_io.withdraw_from_labels(amounts=str(amount), from_labels=username, to_addresses=address)
-			data_2 = block_io.get_address_by_label(label=username)
-			sendMsg(withdrawMsg(data_1),chatid)
-		except ValueError:
-			sendMsg("@"+username+" invalid amount.",chatid)
+			data = block_io.withdraw_from_labels(amounts=str(amount), from_labels=username, to_addresses=address)
+			sendMsg(withdrawMsg(data),chatid)
 		except:
 			sendMsg("@"+username+" insufficient balance or you are not registered yet.",chatid)
 
