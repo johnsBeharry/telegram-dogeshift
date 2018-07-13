@@ -23,6 +23,7 @@ monikers_str  = '\n'.join(f"{i[0]}: {i[2]} doge" for i in monikers_tuple)
 def withdrawMsg(dataPassed):
 	if dataPassed['status'] == 'success':
 		return f"Withdrawal successful! Track it's progress here: https://dogechain.info/tx/{dataPassed['data']['txid']}"
+	#To figure out later: how to get entire 'data' object returned when 'except'.
 	elif dataPassed['status'] == 'fail':
 		if dataPassed['data']['error_message'].split(' ')[0] == 'Cannot':
 			return f"Sorry, funds are too low. Your maximum withdrawable balance is {float(dataPassed['data']['max_withdrawal_available']):,.0f} Doge.",
@@ -104,7 +105,7 @@ def process(message,username,chatid):
 			data = block_io.withdraw_from_labels(amounts=str(amount), from_labels=username, to_addresses=address)
 			sendMsg(withdrawMsg(data),chatid)
 		except Exception as error:
-			sendMsg("@"+username+", "+str(error)[8:],chatid)
+			sendMsg("@"+username+", "+str(error)[8:9].lower()+str(error)[9:],chatid)
 
 	elif "/rain" in message[0]:
 		try:
