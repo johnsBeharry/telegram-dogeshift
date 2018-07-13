@@ -103,8 +103,8 @@ def process(message,username,chatid):
 			address = message[2]
 			data = block_io.withdraw_from_labels(amounts=str(amount), from_labels=username, to_addresses=address)
 			sendMsg(withdrawMsg(data),chatid)
-		except:
-			sendMsg("@"+username+" insufficient balance or you are not registered yet.",chatid)
+		except Exception as error:
+			sendMsg("@"+username+", "+str(error)[8:],chatid)
 
 	elif "/rain" in message[0]:
 		try:
