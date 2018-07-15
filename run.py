@@ -106,6 +106,8 @@ def process(message,username,chatid):
 			address = message[2]
 			data = block_io.withdraw_from_labels(amounts=str(amount), from_labels=username, to_addresses=address)
 			sendMsg(withdrawMsg(data, address, amount),chatid)
+		except ValueError:
+			sendMsg("@" + username + " invalid amount.", chatid)
 		except Exception as error:
 			try:
 				url_fail = 'https://block.io/api/v2/withdraw_from_labels/?' + \
