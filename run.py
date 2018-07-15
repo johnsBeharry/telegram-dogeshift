@@ -27,10 +27,8 @@ def withdrawMsg(dataPassed, address, amount):
 	elif dataPassed['status'] == 'fail':
 		if dataPassed['data']['error_message'].split(' ')[0] == 'Cannot':
 			return f"Sorry, funds are too low. Your maximum withdrawable balance is {float(dataPassed['data']['max_withdrawal_available']):,.0f} Doge.",
-		elif dataPassed['data']['error_message'].split(' ')[0] == 'Invalid':
-			return f"Sorry, '{amount}' is not a valid amount."
 		elif dataPassed['data']['error_message'].split(' ')[0] == 'One':
-			return f"Sorry, destination address {address} is invalid."
+			return f"Sorry, your destination address is invalid."
 		else:
 			return error
 
@@ -107,7 +105,7 @@ def process(message,username,chatid):
 			data = block_io.withdraw_from_labels(amounts=str(amount), from_labels=username, to_addresses=address)
 			sendMsg(withdrawMsg(data, address, amount),chatid)
 		except ValueError:
-			sendMsg("@" + username + " invalid amount.", chatid)
+			sendMsg(f"Sorry, '{message[1]}' is not a valid amount.", chatid)
 		except Exception as error:
 			try:
 				url_fail = 'https://block.io/api/v2/withdraw_from_labels/?' + \
