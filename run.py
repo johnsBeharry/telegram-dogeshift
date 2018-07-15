@@ -117,7 +117,11 @@ def process(message,username,chatid):
 
 				sendMsg(withdrawMsg(data, address, amount), chatid)
 			except:
-				sendMsg("@"+username+", "+str(error)[8:9].lower()+str(error)[9:],chatid)
+				if (str(error)[:4] == "Fail"):
+					sendMsg("@"+username+", "+str(error)[8:9].lower()+str(error)[9:],chatid)
+				else:
+					sendMsg("@" + username + " oops it looks like you entered something wrong 🙈", chatid)
+					sendMsg("Double-check your amount & address and let's try that again!", chatid)
 
 	elif "/rain" in message[0]:
 		try:
