@@ -29,7 +29,7 @@ def withdrawMsg(dataPassed, address, amount):
 			return f"Sorry, funds are too low. Your maximum withdrawable balance is {float(dataPassed['data']['max_withdrawal_available']):,.0f} Doge.",
 		elif dataPassed['data']['error_message'].split(' ')[0] == 'Invalid':
 			return f"Sorry, '{amount}' is not a valid amount."
-		elif dataPassed['data']['error_message'].split(' ')[0] == 'Destination':
+		elif dataPassed['data']['error_message'].split(' ')[0] == 'One':
 			return f"Sorry, destination address {address} is invalid."
 		else:
 			return error
