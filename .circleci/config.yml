@@ -1,0 +1,18 @@
+version: 2
+jobs: 
+  build: 
+    branches: 
+      only: 
+        - develop
+    docker: 
+      - image: "circleci/python:3.6"
+    working_directory: ~/telegram-dogecoin
+    steps: 
+      - checkout
+      - run:
+          name: "install dependencies"
+          command: |
+            pipenv install
+      - run:
+          name: "run tests"
+          command: pipenv run behave
