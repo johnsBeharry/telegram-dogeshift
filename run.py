@@ -36,6 +36,7 @@ def returnBal(username):
 
 
 def process(message, username, chatid):
+    global active_users
     message = message.split(" ")
     for i in range(message.count(' ')):
         message.remove(' ')
@@ -118,7 +119,6 @@ def process(message, username, chatid):
     elif "/active" in message:
         sendMsg("Current active : %d shibes" % (len(getActive(chatid, active_users, current_time))), chatid)
     else:
-        global active_users
         try:
             active_users[chatid][username] = time.time()
         except KeyError:
