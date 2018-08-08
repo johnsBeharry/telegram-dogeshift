@@ -2,6 +2,7 @@ import requests
 import time
 from block_io import BlockIo
 import os
+import utils
 
 token = os.environ['TELEGRAM_BOT_TOKEN']  # Telegram bot token
 url = "https://api.telegram.org/bot%s/" % (token)
@@ -9,7 +10,9 @@ n = 0
 version = 2
 block_io = BlockIo(os.environ['BLOCKIO_API_KEY'], os.environ['BLOCKIO_PIN'], version)
 active_users = {}
+current_time = time.time()
 
+# an array of reward items
 monikers_tuple = [
     ("sandwich", "sandwiches", 21),
     ("coffee", "coffees", 7),
@@ -59,6 +62,7 @@ def returnBal(username):
 
 
 def process(message, username, chatid):
+    global active_users
     message = message.split(" ")
     for i in range(message.count(' ')):
         message.remove(' ')
@@ -130,7 +134,7 @@ def process(message, username, chatid):
 
     elif "/rain" in message[0]:
         try:
-            users = getCount(chatid)
+            users = getActive(chatid, active_users, current_time)
             if username in users:
                 users.remove(username)
             number = len(users)
@@ -153,9 +157,8 @@ def process(message, username, chatid):
                 monikers_str, chatid)
 
     elif "/active" in message:
-        sendMsg("Current active : %d shibes" % (len(getCount(chatid))), chatid)
+        sendMsg("Current active : %d shibes" % (len(getActive(chatid, active_users, current_time))), chatid)
     else:
-        global active_users
         try:
             active_users[chatid][username] = time.time()
         except KeyError:
@@ -166,6 +169,7 @@ def process(message, username, chatid):
 while True:
     try:
         print("such dogeshift. much running.")
+        # get's updates from the bot and decodes it
         data = requests.get(url + "getUpdates", data={"offset": n}).json()
         n = data["result"][0]["update_id"] + 1
         username = data["result"][0]["message"]["from"]['username']
