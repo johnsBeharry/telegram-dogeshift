@@ -37,16 +37,6 @@ def withdrawMsg(dataPassed, address, amount):
             return error
 
 
-def getCount(chatid):
-    n = []
-    t = time.time()
-    chat_users = active_users[chatid]
-    for i in chat_users:
-        if t - chat_users[i] <= 600:
-            n.append(i)
-    return n
-
-
 def sendMsg(message, chatid):
     requests.get(url + "sendMessage", data={"chat_id": chatid, "text": message})
 
