@@ -1,23 +1,6 @@
-# Prerequisites
-
-#### Setup Block.io Account
-[block.io](https://block.io) will be used by the bot so it can create and label wallets for users who type `/register`.
-
-1. Go to [block.io](https://block.io) and create an account (free)
-2. Set a pin, and save your [mnemonic](https://en.wikipedia.org/wiki/Mnemonic) phrase offline.
-_This will be used to generate your wallet again in the event you lose access to your account so always have the habit of keeping this safe._
-3. Click on "Show API Key" then copy the key for "Dogecoin (testnet)"
-
-#### Create a Telegram Bot [@BotFather](https://core.telegram.org/bots#6-botfather)
-Further bot  documentation [link](https://core.telegram.org/bots#6-botfather)
-
-1. Start a chat with [@botfather](https://telegram.me/botfather)
-2. Type `/newbot` then follow the instructions
-3. @botfather will send you your bot's authentication token
-
 # Getting Started
 
-Once you have a Block.io Account setup, and created your own Telegram Bot it's time to clone the project and get it setup.
+The first thing you will need to do is to clone the repository.
 
 1. `git clone git@github.com:peakshift/telegram-dogecoin.git`
 2. `cd telegram-dogecoin`
