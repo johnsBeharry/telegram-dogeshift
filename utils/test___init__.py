@@ -32,7 +32,6 @@ class TestMsgParse(unittest.TestCase):
             ""  # address
         ])
 
-
         # Test that function can parse a rounded down
         # integer when a floating point number is passed
         message = "/tip hey can u send some coffee across to my boy @username... 2.99 cups please :)"
