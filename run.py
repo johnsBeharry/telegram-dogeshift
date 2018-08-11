@@ -53,56 +53,56 @@ def returnBal(username):
 
 def process(message, username, chatid):
     global active_users
-    message = utils.msg_parse(message, monikers_flat)
+    parsedMsg = utils.msg_parse(message, monikers_flat)
 
-    if "/register" in message[0]:
+    if "/register" in parsedMsg[0]:
         try:
             block_io.get_new_address(label=username)
             sendMsg("@" + username + " you are now registered.", chatid)
         except:
             sendMsg("@" + username + " you are already registered.", chatid)
-    elif "/balance" in message[0]:
+    elif "/balance" in parsedMsg[0]:
         try:
             (balance, pending_balance, balance_msg, pending_msg) = returnBal(username)
             sendMsg("@" + username + balance_msg + pending_msg, chatid)
         except:
             sendMsg("@" + username + " you are not registered yet. use /register to register.", chatid)
-    elif "/tip" in message[0]:
+    elif "/tip" in parsedMsg[0]:
         try:
-            person = message[1]
-            amount_msg = message[2]
-            amount = abs(float(amount_msg)) * monikers_dict.get(message[3], 1)
+            person = parsedMsg[1]
+            amount_msg = parsedMsg[2]
+            amount = abs(float(amount_msg)) * monikers_dict.get(parsedMsg[3], 1)
 
-            if monikers_dict.get(message[3], 0) == 0:
+            if monikers_dict.get(parsedMsg[3], 0) == 0:
                 sin_plu = "doge"
             elif amount_msg == 1:
-                sin_plu = monikers_tuple[monikers_flat.index(message[3]) // 3][0]
+                sin_plu = monikers_tuple[monikers_flat.index(parsedMsg[3]) // 3][0]
             else:
-                sin_plu = monikers_tuple[monikers_flat.index(message[3]) // 3][1]
+                sin_plu = monikers_tuple[monikers_flat.index(parsedMsg[3]) // 3][1]
 
             block_io.withdraw_from_labels(amounts=str(amount), from_labels=username, to_labels=person)
             sendMsg("@" + username + " tipped " + str(amount_msg) + " " + sin_plu +
-                    ("" if monikers_dict.get(message[3], 0) == 0 else f" ({str(amount)} doge)") +
+                    ("" if monikers_dict.get(parsedMsg[3], 0) == 0 else f" ({str(amount)} doge)") +
                     " to @" + person + "", chatid)
         except ValueError:
             sendMsg("@" + username + " invalid amount.", chatid)
         except:
             sendMsg("@" + username + " insufficient balance or @" + person + " is not registered yet.", chatid)
-    elif "/address" in message[0]:
+    elif "/address" in parsedMsg[0]:
         try:
             data = block_io.get_address_by_label(label=username)
             sendMsg("@" + username + " your address is " + data['data']['address'] + "" +
                     "\n\nhttps://dogechain.info/address/" + data['data']['address'] + "", chatid)
         except:
             sendMsg("@" + username + " you are not registered yet. use /register to register.", chatid)
-    elif "/withdraw" in message[0]:
+    elif "/withdraw" in parsedMsg[0]:
         try:
-            amount = abs(float(message[2]))
-            address = message[4]
+            amount = abs(float(parsedMsg[2]))
+            address = parsedMsg[4]
             data = block_io.withdraw_from_labels(amounts=str(amount), from_labels=username, to_addresses=address)
             sendMsg(withdrawMsg(data, address, amount), chatid)
         except ValueError:
-            sendMsg(f"Sorry, '{message[1]}' is not a valid amount.", chatid)
+            sendMsg(f"Sorry, '{parsedMsg[1]}' is not a valid amount.", chatid)
         except Exception as error:
             try:
                 url_fail = 'https://block.io/api/v2/withdraw_from_labels/?' + \
@@ -120,7 +120,7 @@ def process(message, username, chatid):
                     sendMsg("@" + username + " oops it looks like you entered something wrong 🙈", chatid)
                     sendMsg("Double-check your amount & address and let's try that again!", chatid)
 
-    elif "/rain" in message[0]:
+    elif "/rain" in parsedMsg[0]:
         try:
             users = getActive(chatid, active_users, current_time)
             if username in users:
@@ -140,11 +140,11 @@ def process(message, username, chatid):
         except:
             pass
 
-    elif "/monikers" in message[0]:
+    elif "/monikers" in parsedMsg[0]:
         sendMsg("--MONIKERS--\n\n" +
                 monikers_str, chatid)
 
-    elif "/active" in message[0]:
+    elif "/active" in parsedMsg[0]:
         sendMsg("Current active : %d shibes" % (len(getActive(chatid, active_users, current_time))), chatid)
     else:
         try:
