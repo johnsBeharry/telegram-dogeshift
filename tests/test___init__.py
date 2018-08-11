@@ -1,5 +1,5 @@
 import unittest
-from __init__ import msg_parse
+from utils import msg_parse
 
 
 class TestMsgParse(unittest.TestCase):
