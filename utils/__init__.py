@@ -1,5 +1,6 @@
 import re
 
+
 def getActive(chatid, active_users, timenow):
     """
     This function accepts three parameters; chatid, active_users
@@ -22,6 +23,22 @@ def getActive(chatid, active_users, timenow):
 
 
 def msg_parse(message, monikers_flat):
+    """
+    This function accepts two parameters; message & monikers_flat
+    and returns a list of selected message items
+
+    Parameters:
+        message (string): imported Telegram message
+        monikers_flat (list): list of all tuple elements from 'monikers_tuple'
+
+    Return:
+        n (list): selected message items  as follows:
+        message[0]: bot call
+        message[1]: username
+        message[2]: amount
+        message[3]: moniker
+        message[4]: address
+    """
     pattern_call = "^(\/\w+)"
     pattern_address = "(\w{26,})"
     pattern_username = "@(\w+)"
@@ -46,5 +63,3 @@ def msg_parse(message, monikers_flat):
                 break
 
     return results
-
-
