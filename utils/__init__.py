@@ -54,6 +54,7 @@ def msg_parse(message, monikers_flat):
         else:
             results.append("")
 
+    # Second pass to set moniker word properly at results[3]
     pattern_allWords = "[^\/]\\b([a-zA-Z]+)\\b"
     allWords = re.findall(pattern_allWords, message)
     if results[3] not in monikers_flat:
@@ -61,5 +62,8 @@ def msg_parse(message, monikers_flat):
             if word in monikers_flat:
                 results[3] = word
                 break
+
+    # Convert single amount descriptors 'a/an'  to an amount of "1" at results[2]
+    results[2] = "1" if ((results[2] == "" and results[3] != "") or 'a' in results[2]) else results[2]
 
     return results

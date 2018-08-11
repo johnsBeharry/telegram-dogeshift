@@ -70,7 +70,7 @@ def process(message, username, chatid):
     elif "/tip" in message[0]:
         try:
             person = message[1]
-            amount_msg = "1" if ((message[2] == "" and message[3] != "") or 'a' in message[2]) else message[2]
+            amount_msg = message[2]
             amount = abs(float(amount_msg)) * monikers_dict.get(message[3], 1)
 
             if monikers_dict.get(message[3], 0) == 0:

@@ -53,7 +53,7 @@ class TestMsgParse(unittest.TestCase):
         self.assertEqual(message, [
             "/tip",  # bot call
             "username",  # username
-            "",  # amount
+            "1",  # amount
             "coffee",  # moniker
             ""  # address
         ])
@@ -65,7 +65,7 @@ class TestMsgParse(unittest.TestCase):
         self.assertEqual(message, [
             "/tip",  # bot call
             "username",  # username
-            "a",  # amount
+            "1",  # amount
             "coffee",  # moniker
             ""  # address
         ])
