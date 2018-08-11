@@ -2,7 +2,6 @@ import requests
 import time
 from block_io import BlockIo
 import os
-import re
 import utils
 
 token = os.environ['TELEGRAM_BOT_TOKEN']  # Telegram bot token
@@ -23,33 +22,6 @@ monikers_tuple = [
 monikers_dict = {n[i]: n[2] for n in monikers_tuple for i in range(2)}
 monikers_flat = [monikers_tuple[i][j] for i in range(len(monikers_tuple)) for j in range(3)]
 monikers_str = '\n'.join(f"{i[0]}: {i[2]} doge" for i in monikers_tuple)
-
-
-def msg_parse(string):
-    pattern_call = "^(\/\w+)"
-    pattern_address = "(\w{26,})"
-    pattern_username = "@(\w+)"
-    pattern_amount = "\s(\d+)" if re.search("\s(\d+)", string) else "\s(a[h|n]?)\s"
-    pattern_moniker = pattern_amount.replace("(", "").replace(")", "") + "\s*(\w+)"
-    patterns = [pattern_call, pattern_username, pattern_amount, pattern_moniker, pattern_address]
-
-    results = []
-    for pattern in patterns:
-        result = re.search(pattern, string)
-        if result:
-            results.append(result.group(1))
-        else:
-            results.append("")
-
-    pattern_allWords = "[^\/]\\b([a-zA-Z]+)\\b"
-    allWords = re.findall(pattern_allWords, message)
-    if results[3] not in monikers_flat:
-        for word in allWords:
-            if word in monikers_flat:
-                results[3] = word
-                break
-
-    return results
 
 
 def withdrawMsg(dataPassed, address, amount):
@@ -81,7 +53,7 @@ def returnBal(username):
 
 def process(message, username, chatid):
     global active_users
-    message = msg_parse(message)
+    message = utils.msg_parse(message, monikers_flat)
 
     if "/register" in message[0]:
         try:
