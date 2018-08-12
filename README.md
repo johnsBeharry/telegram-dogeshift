@@ -32,6 +32,25 @@ To begin testing your scenarios
 - if it fails
   - fix the problem so all tests pass
 
+#### Configuring CircleCI
+Changes to the CircleCI config can be made at `/.circleci/config.yml`
+
+To test your config changes locally:
+1. Open Terminal and cd to telegram-dogecoin repository
+2. `$ cd .circleci`
+3. Go to circleci.com and [get a new API token](https://circleci.com/account/api) (for `CIRCLE_TOKEN`)
+4. `$ git log`
+5. Copy the commit hash (for `COMMIT_HASH`)
+6. Copy the branch name (for `BRANCH_URL`)
+7. Set environment variables in Terminal:
+    ```
+    $ export CIRCLE_TOKEN=<api token>
+    $ export COMMIT_HASH=<commit hash>
+    $ export BRANCH_URL=https://circleci.com/api/v1.1/project/github/peakshift/telegram-dogecoin/tree/<branch name>
+    ```
+8. Execute build script:  `$ ./run-build-locally.sh`
+9. Go to `https://circleci.com/gh/peakshift/telegram-dogecoin/tree/<branch name>` and confirm tests are running. 
+
 ### Pushing Changes
 1. Open Terminal.
 2. `git pull`
