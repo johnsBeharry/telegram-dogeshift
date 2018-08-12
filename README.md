@@ -33,7 +33,8 @@ To begin testing your scenarios
   - fix the problem so all tests pass
 
 #### Configuring CircleCI
-Changes to the CircleCI config can be made at `/.circleci/config.yml`
+Changes to the CircleCI config can be made at `/.circleci/config.yml`. For guidance on how
+configs work, see [this documentation](https://circleci.com/docs/2.0/examples/).
 
 To test your config changes locally:
 1. Open Terminal and cd to telegram-dogecoin repository
