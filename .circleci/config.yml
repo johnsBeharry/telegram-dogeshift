@@ -1,9 +1,9 @@
 version: 2
 jobs: 
   build: 
-    branches: 
-      only: 
-        - develop
+    #branches:
+    #  only:
+    #    - develop
     docker: 
       - image: "circleci/python:3.6"
     working_directory: ~/telegram-dogecoin
@@ -14,5 +14,8 @@ jobs:
           command: |
             pipenv install
       - run:
-          name: "run tests"
+          name: "run behave tests"
           command: pipenv run behave
+      - run:
+          name: "run unit tests"
+          command: pipenv run python3 -m unittest
