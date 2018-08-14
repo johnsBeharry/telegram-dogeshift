@@ -1,23 +1,26 @@
-# Getting Started
+# Telegram Dogecoin
 
-The first thing you will need to do is to clone the repository.
+Much chat! Such wow!
+
+### Requirements
+1. [pipenv](https://docs.pipenv.org/install/#installing-pipenv)
+
+### Getting Started
 
 1. `git clone git@github.com:peakshift/telegram-dogecoin.git`
 2. `cd telegram-dogecoin`
-3. `pip install block-io`
-4. `pip install requests`
-5. `pip install behave`
-6. `TELEGRAM_BOT_TOKEN=<your token> BLOCKIO_API_KEY=<your key> BLOCKIO_PIN=<your pin> python3 run.py`
+3. `pipenv install`
+6. `TELEGRAM_BOT_TOKEN=<your token> BLOCKIO_API_KEY=<your key> BLOCKIO_PIN=<your pin> pipenv run python3 run.py`
 
 _In step 5, replace the entire of `<your token>`, `<your token>`, `<your token>`._
 
-# Contributing
+### Contributing
 
-### Branches
+#### Branches
 - A branch name should begin with the issue number, and have short name (2-4 words). New features or fixes should be based off of the `master` branch.
   - `git checkout -b 123-short-name master`
 
-### Testing
+#### Testing
 When making changes or adding a new feature, to ensure the feature works correctly or the changes made have not broken the code then you can do unit testing using the behave framework and gherkin scenarios.
 *[Behave Framework Docs](https://behave.readthedocs.io/en/latest/) 
 
@@ -32,7 +35,7 @@ To begin testing your scenarios
 - if it fails
   - fix the problem so all tests pass
 
-#### Configuring CircleCI
+#### Testing CircleCI Locally
 Changes to the CircleCI config can be made at `/.circleci/config.yml`. For guidance on how
 configs work, see [this documentation](https://circleci.com/docs/2.0/examples/).
 
@@ -52,14 +55,14 @@ To test your config changes locally:
 8. Execute build script:  `$ ./run-build-locally.sh`
 9. Go to `https://circleci.com/gh/peakshift/telegram-dogecoin/tree/<branch name>` and confirm tests are running. 
 
-### Pushing Changes
+#### Pushing Changes
 1. Open Terminal.
 2. `git pull`
 3. `git add file_name.py`
 4. `git commit -m "type(component): subject line"`
 5. `git push origin 123-short-name `
 
-### Commit Messages
+#### Commit Messages
 
 *We follow the [Angular commit guidelines](https://github.com/angular/angular.js/blob/master/DEVELOPERS.md#-git-commit-guidelines) so that we can generate changelogs and have a clean commit history — see Pushing Changes #3 for an example commit.*
 
