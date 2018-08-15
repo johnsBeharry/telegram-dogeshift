@@ -61,12 +61,14 @@ def process(message, username, chatid):
             sendMsg("@" + username + " you are now registered.", chatid)
         except:
             sendMsg("@" + username + " you are already registered.", chatid)
+
     elif "/balance" in parsedMsg[0].lower():
         try:
             (balance, pending_balance, balance_msg, pending_msg) = returnBal(username)
             sendMsg("@" + username + balance_msg + pending_msg, chatid)
         except:
             sendMsg("@" + username + " you are not registered yet. use /register to register.", chatid)
+
     elif "/tip" in parsedMsg[0].lower():
         try:
             person = parsedMsg[1]
@@ -88,6 +90,7 @@ def process(message, username, chatid):
             sendMsg("@" + username + " invalid amount.", chatid)
         except:
             sendMsg("@" + username + " insufficient balance or @" + person + " is not registered yet.", chatid)
+
     elif "/address" in parsedMsg[0].lower():
         try:
             data = block_io.get_address_by_label(label=username)
@@ -95,6 +98,7 @@ def process(message, username, chatid):
                     "\n\nhttps://dogechain.info/address/" + data['data']['address'] + "", chatid)
         except:
             sendMsg("@" + username + " you are not registered yet. use /register to register.", chatid)
+
     elif "/withdraw" in parsedMsg[0].lower():
         try:
             amount = abs(float(parsedMsg[2]))
