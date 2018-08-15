@@ -148,6 +148,12 @@ def process(message, username, chatid):
         sendMsg("--MONIKERS--\n\n" +
                 monikers_str, chatid)
 
+    elif "/getbotusers" in parsedMsg[0].lower():
+        api_users = block_io.get_my_addresses(page='1')['data']['addresses']
+        reg_users = utils.getRegistered(api_users)
+        reg_users_string = ", ".join(f"@{i}" for i in reg_users)
+        sendMsg(f"Active shibes ({len(reg_users)}): {reg_users_string}", chatid)
+
     elif "/active" in parsedMsg[0].lower():
         sendMsg("Current active : %d shibes" % (len(getActive(chatid, active_users, current_time))), chatid)
     else:
