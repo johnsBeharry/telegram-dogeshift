@@ -126,7 +126,7 @@ def process(message, username, chatid):
 
     elif "/rain" in parsedMsg[0].lower():
         try:
-            users = getActive(chatid, active_users, current_time)
+            users = utils.getActive(chatid, active_users, current_time)
             if username in users:
                 users.remove(username)
             number = len(users)
@@ -155,7 +155,7 @@ def process(message, username, chatid):
         sendMsg(f"Active shibes ({len(reg_users)}): {reg_users_string}", chatid)
 
     elif "/active" in parsedMsg[0].lower():
-        sendMsg("Current active : %d shibes" % (len(getActive(chatid, active_users, current_time))), chatid)
+        sendMsg("Current active : %d shibes" % (len(utils.getActive(chatid, active_users, current_time))), chatid)
     else:
         try:
             active_users[chatid][username] = time.time()
