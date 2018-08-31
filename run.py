@@ -1,7 +1,7 @@
-import requests
-import time
-from block_io import BlockIo
 import os
+import time
+import requests
+from block_io import BlockIo
 import utils
 
 token = os.environ['TELEGRAM_BOT_TOKEN']  # Telegram bot token
