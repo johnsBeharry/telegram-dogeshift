@@ -1,7 +1,4 @@
 Feature: Telegram Bot
-As a ___ 
-I want ___
-So that ___
 
 
 Scenario: Get list of active users
