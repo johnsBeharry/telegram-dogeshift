@@ -1,5 +1,4 @@
 *.pyc
 .env
 .idea
-Pipfile.lock
 
