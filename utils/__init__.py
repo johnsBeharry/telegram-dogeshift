@@ -22,6 +22,25 @@ def getActive(chatid, active_users, timenow):
     return n
 
 
+def getRegistered(chat_users):
+    """
+    This function accepts one parameter; chat_users and
+    returns a list of users registered with the bot across
+    all chat sessions.
+
+    Parameters:
+        chat_users (object): list of users registered with bot
+
+    Return:
+        n (list): currently registered users
+    """
+    usernames = []
+    for user in chat_users:
+        usernames.append(user['label'])
+    usernames.pop(0)
+    return usernames
+
+
 def msg_parse(message, monikers_flat):
     """
     This function accepts two parameters; message & monikers_flat
