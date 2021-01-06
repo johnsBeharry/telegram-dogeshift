@@ -88,7 +88,7 @@ def process(message,username,chatid):
 		try:
 			amount = abs(float(message[1]))
 			address = message[2]
-			data = block_io.withdraw_from_labels(amounts=str(amount), from_labels=username, to_addresses=address)
+			data = block_io.withdraw(amounts='AMOUNT1,AMOUNT2,...', to_addresses='ADDRESS1,ADDRESS2,...', priority='custom', custom_network_fee='CUSTOM_NETWORK_FEE')
 		except ValueError:
 			sendMsg("@"+username+" invalid amount.",chatid)
 		except:
