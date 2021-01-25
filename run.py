@@ -38,23 +38,38 @@ def returnBal(username):
 	pending_balance = data['data']['balances'][0]['pending_received_balance']
 	return (balance, pending_balance)
 
-def process(message,username,chatid):
+def process(message,firstname,username,chatid):
 	message = message.split(" ")
 	for i in range(message.count(' ')):
 		message.remove(' ')
 
-	if "/register" in message[0]:
+# /start
+	if "/start" in message[0]:
+		try:
+			sendMsg(str(firstname)+" Welcome To The PeakShift Tip Bot\n\nhere's how this bot works.\n\nYou can use @dogeshift_bot by messaging it directly or in a group that it is a part of.\n\nAvailable Commands\n\n/register - Register Your Self In the bot\n/tip @username 10 doge - use this To Tip some doge from your balance to another user\n/address - Get Your Deposit Address\n/withdraw 100 <address> - to withdraw Your balance",chatid)
+		except Exception as e:
+			print("Error : 50 : "+str(e))
+# /help
+	elif "/help" in message[0]:
+		try:
+			sendMsg("Hey, so here's how this bot works.\n\nYou can use @dogeshift_bot by messaging it directly or in a group that it is a part of.\n\nAvailable Commands\n\n/register - Register Your Self In the bot\n/tip @username 10 doge - use this To Tip some doge from your balance to another user\n/address - Get Your Deposit Address\n/withdraw 100 <address> - to withdraw Your balance",chatid)
+		except Exception as e:
+			print("Error : 55 : "+str(e))
+# /register
+	elif "/register" in message[0]:
 		try:
 			block_io.get_new_address(label=username)
 			sendMsg("@"+username+" you are now registered.",chatid)
 		except:
 			sendMsg("@"+username+" you are already registered.",chatid)
+# /balance
 	elif "/balance" in message[0]:
 		try:
 			(balance, pending_balance) = returnBal(username)
 			sendMsg("@"+username+" Balance : "+balance+ "Doge ("+pending_balance+" Doge)",chatid)
 		except:
 			sendMsg("@"+username+" you are not registered yet. use /register to register.",chatid)
+# /tip
 	elif "/tip" in message[0]:
 		try:
 			person = message[1].replace('@','')
@@ -78,12 +93,14 @@ def process(message,username,chatid):
 			sendMsg("@"+username+" invalid amount.",chatid)
 		except:
 			sendMsg("@"+username+" insufficient balance or @"+person+" is not registered yet.",chatid)
+# /address
 	elif "/address" in message[0]:
 		try:
 			data = block_io.get_address_by_label(label=username)
 			sendMsg("@"+username+" your address is "+data['data']['address']+"",chatid)
 		except:
 			sendMsg("@"+username+" you are not registered yet. use /register to register.",chatid)
+# /withdraw
 	elif "/withdraw" in message[0]:
 		try:
 			amount = abs(float(message[1]))
@@ -93,7 +110,7 @@ def process(message,username,chatid):
 			sendMsg("@"+username+" invalid amount.",chatid)
 		except:
 			sendMsg("@"+username+" insufficient balance or you are not registered yet.",chatid)
-
+# /rain
 	elif "/rain" in message[0]:
 		try:
 			users = getCount(chatid)
@@ -113,7 +130,7 @@ def process(message,username,chatid):
 				sendMsg("@"+name+" is raining on "+','.join(users)+"",chatid)
 		except:
 			pass
-
+# /monikers
 	elif "/monikers" in message:
 		sendMsg("--MONIKERS--\n" +
 			monikers_str,chatid)
@@ -123,19 +140,30 @@ def process(message,username,chatid):
 	else:
 		global active_users
 		try:
-				active_users[chatid][username] = time.time()
+			active_users[chatid][username] = time.time()
 		except KeyError:
 			active_users[chatid] = {}
 			active_users[chatid][username] = time.time()
 
 while True:
 	try:
-		print("such dogeshift. much running.")
+		print("such dogeshift. much running. ",time.time())
 		data = requests.get(url+"getUpdates", data={"offset":n}).json()
+		#print(data)
+		#print(" \n ")
 		n = data["result"][0]["update_id"] + 1
-		username = data["result"][0]["message"]["from"]['username']
+		try:
+			username = data["result"][0]["message"]["from"]["username"]
+		except:
+			username = "UnKnown uname"
+		try:
+			firstname = data["result"][0]["message"]["from"]["first_name"]
+		except Exception as e:
+			print(e)
+			firstname = "Unknown name"
 		chatid = data["result"][0]["message"]["chat"]["id"]
 		message = data["result"][0]["message"]["text"]
-		process(message,username,chatid)
-	except:
+		process(message,firstname,username,chatid)
+	except Exception as e:
+		#print("Error : 141 : "+str(e))
 		pass
