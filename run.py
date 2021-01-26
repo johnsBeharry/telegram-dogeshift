@@ -46,7 +46,7 @@ def process(message,firstname,username,chatid):
 # /start
 	if "/start" in message[0]:
 		try:
-			sendMsg(str(firstname)+" Welcome To The PeakShift Tip Bot\n\nhere's how this bot works.\n\nYou can use @dogeshift_bot by messaging it directly or in a group that it is a part of.\n\nAvailable Commands\n\n/register - Register Your Self In the bot\n/tip @username 10 doge - use this To Tip some doge from your balance to another user\n/address - Get Your Deposit Address\n/withdraw 100 <address> - to withdraw Your balance",chatid)
+			sendMsg(str(username)+" welcome. I'm the the Peak Shift @ Work Bot\n\nHere's how it works.\n\nYou can use @dogeshift_bot by messaging it directly or in a group that it is a part of.\n\nAvailable Commands\n\n/register - Registers your username with the bot\n/tip @username 10 doge - use this to tip some doge from your balance to another user\n/address - Get your deposit address\n/withdraw 100 <address> - to withdraw your balance",chatid)
 		except Exception as e:
 			print("Error : 50 : "+str(e))
 # /help
