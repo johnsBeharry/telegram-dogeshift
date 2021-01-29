@@ -59,8 +59,8 @@ def process(message,firstname,username,chatid):
 # /register
 	elif "/register" in message[0]:
 		try:
-			block_io.get_new_address(label=username)
-			sendMsg("@"+username+" you are now registered.",chatid)
+			a = block_io.get_new_address(label=username)
+			sendMsg("@"+username+" you are now registered.\nYour Address : <code>"+str(a['data']['address'])+"</code>",chatid)
 		except:
 			sendMsg("@"+username+" you are already registered.",chatid)
 # /balance
