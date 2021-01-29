@@ -33,7 +33,6 @@ monikers_str  = '\n'.join(f"{i[0]}: {i[2]} doge" for i in monikers_tuple)
 
 md = (
 		MarkdownIt()
-		.use(front_matter_plugin)
 		.disable('image')
 		.enable('table')
 		)
