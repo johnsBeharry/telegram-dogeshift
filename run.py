@@ -145,7 +145,7 @@ def process(message,firstname,username,chatid):
 					("" if monikers_dict.get(message[3], 0) == 0 else f" ({str(amount)} doge)") +
 					" to @"+person+"",chatid)
 			(balance, pending_balance) = returnBal(person)
-			sendMsg("@"+person+" Balance : "+balance+ "Doge ("+pending_balance+" Doge)",chatid)
+			sendMsg("@"+person+" Balance : "+math.floor(balance)+ "Doge ("+math.floor(pending_balance)+" Doge)",chatid)
 		except ValueError:
 			sendMsg("@"+username+" invalid amount.",chatid)
 		except:
