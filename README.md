@@ -15,6 +15,15 @@ Further bot  documentation [link](https://core.telegram.org/bots#6-botfather)
 2. Type `/newbot` then follow the instructions
 3. @botfather will send you your bot's authentication token
 
+#### Create a Github Access Token
+
+1. Goto your github account [settings](https://github.com/settings/profile)
+2. Click on [Developer Settings](https://github.com/settings/apps)
+3. Click on [Persoanl Access Tokens](https://github.com/settings/tokens)
+4. Here `Generate a New Token`.
+4. Give it a Name and all the Permissions and click on `Generate Token`.
+5. Your token will look like : `g96641055hua1d959e2112232225f77c89182a794a`
+
 # Getting Started
 
 Once you have a Block.io Account setup, and created your own Telegram Bot it's time to clone the project and get it setup.
@@ -24,9 +33,9 @@ Once you have a Block.io Account setup, and created your own Telegram Bot it's t
 3. `pip install block-io`
 4. `pip install requests`
 5. `pip install behave`
-6. `TELEGRAM_BOT_TOKEN=<your token> BLOCKIO_API_KEY=<your key> BLOCKIO_PIN=<your pin> python3 run.py`
+6. `TELEGRAM_BOT_TOKEN=<your token> BLOCKIO_API_KEY=<your key> BLOCKIO_PIN=<your pin> ACCESS_TOKEN=<github access token> python3 run.py`
 
-_In step 5, replace the entire of `<your token>`, `<your token>`, `<your token>`._
+_In step 5, replace the entire of `<your token>`, `<your token>`, `<your token>`,`<github access token>`._
 
 # Contributing
 
