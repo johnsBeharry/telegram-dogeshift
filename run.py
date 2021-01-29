@@ -19,7 +19,6 @@ n = 0
 version = 2
 block_io = BlockIo(os.environ['BLOCKIO_API_KEY'], os.environ['BLOCKIO_PIN'], version)
 active_users = {}
-print(wat.text)
 monikers_tuple  = [
 	("sandwich","sandwiches",21),
 	("coffee", "coffees",7),
