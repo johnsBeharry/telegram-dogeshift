@@ -122,7 +122,7 @@ def process(message,firstname,username,chatid):
 	elif "/balance" in message[0]:
 		try:
 			(balance, pending_balance) = returnBal(username)
-			sendMsg("@"+username+" Balance : "+balance+ "Doge ("+pending_balance+" Doge)",chatid)
+			sendMsg("@"+username+" Balance : "+balance+ " Doge ("+pending_balance+" Doge)",chatid)
 		except:
 			sendMsg("@"+username+" you are not registered yet. use /register to register.",chatid)
 
