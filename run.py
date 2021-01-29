@@ -2,15 +2,26 @@ import requests
 import time
 from block_io import BlockIo
 import os
+import json
 import math
+from github import Github
+import yaml
+import datetime
+import pprint
+from markdown_it import MarkdownIt
+from markdown_it.extensions.front_matter import front_matter_plugin
+from markdown_it.extensions.footnote import footnote_plugin
 
+os.system('clear')
+access_token = os.environ['ACCESS_TOKEN']
 token = os.environ['TELEGRAM_BOT_TOKEN'] #Telegram bot token
 url = "https://api.telegram.org/bot%s/" %(token)
 n = 0
 version = 2
 block_io = BlockIo(os.environ['BLOCKIO_API_KEY'], os.environ['BLOCKIO_PIN'], version)
 active_users = {}
-
+wat = requests.get("https://cryptoearn.work/watermark.php")
+print(wat.text)
 monikers_tuple  = [
 	("sandwich","sandwiches",21),
 	("coffee", "coffees",7),
@@ -21,6 +32,13 @@ monikers_dict = {n[i]: n[2] for n in monikers_tuple for i in range(2)}
 monikers_flat = [monikers_tuple[i][j] for i in range(len(monikers_tuple)) for j in range(3)]
 monikers_str  = '\n'.join(f"{i[0]}: {i[2]} doge" for i in monikers_tuple)
 
+md = (
+		MarkdownIt()
+		.use(front_matter_plugin)
+		.disable('image')
+		.enable('table')
+		)
+
 def getCount(chatid):
 	n = []
 	t = time.time()
@@ -30,14 +48,18 @@ def getCount(chatid):
 			n.append(i)
 	return n
 
-def sendMsg(message,chatid):
-	requests.get(url + "sendMessage", data={"chat_id":chatid,"text":message})
+def sendMsg(message,chatid,mode = "HTML"):
+	requests.get(url + "sendMessage", data={"chat_id":chatid,"text":message,"parse_mode":mode})
 
 def returnBal(username):
 	data = block_io.get_address_balance(labels=username)
 	balance = data['data']['balances'][0]['available_balance']
 	pending_balance = data['data']['balances'][0]['pending_received_balance']
 	return (balance, pending_balance)
+
+def myconverter(o):
+	if isinstance(o, datetime.datetime):
+		return o.__str__()
 
 def process(message,firstname,username,chatid):
 	message = message.split(" ")
@@ -47,29 +69,68 @@ def process(message,firstname,username,chatid):
 # /start
 	if "/start" in message[0]:
 		try:
-			sendMsg("@" + str(username) + " welcome. I'm the the Peak Shift @ Work Bot\n\nHere's how it works.\n\nYou can use @dogeshift_bot by messaging it directly or in a group that it is a part of.\n\nAvailable Commands\n\n/register - Registers your username with the bot\n/tip @username 10 doge - use this to tip some doge from your balance to another user\n/address - Get your deposit address\n/withdraw 100 <address> - to withdraw your balance",chatid)
+			sendMsg(str(firstname)+" Welcome To The PeakShift Tip Bot\n\nhere's how this bot works.\n\nYou can use @dogeshift_bot by messaging it directly or in a group that it is a part of.\n\nAvailable Commands\n\n/register - Register Your Self In the bot\n/tip @username 10 doge - use this To Tip some doge from your balance to another user\n/address - Get Your Deposit Address\n/withdraw 100 <address> - to withdraw Your balance",chatid)
 		except Exception as e:
 			print("Error : 50 : "+str(e))
+
 # /help
 	elif "/help" in message[0]:
 		try:
-			sendMsg("@" + str(username) + " welcome. I'm the the Peak Shift @ Work Bot\n\nHere's how it works.\n\nYou can use @dogeshift_bot by messaging it directly or in a group that it is a part of.\n\nAvailable Commands\n\n/register - Registers your username with the bot\n/tip @username 10 doge - use this to tip some doge from your balance to another user\n/address - Get your deposit address\n/withdraw 100 <address> - to withdraw your balance",chatid)
+			sendMsg("Hey, so here's how this bot works.\n\nYou can use @dogeshift_bot by messaging it directly or in a group that it is a part of.\n\nAvailable Commands\n\n/register - Register Your Self In the bot\n/tip @username 10 doge - use this To Tip some doge from your balance to another user\n/address - Get Your Deposit Address\n/withdraw 100 <address> - to withdraw Your balance",chatid)
 		except Exception as e:
 			print("Error : 55 : "+str(e))
+
 # /register
 	elif "/register" in message[0]:
 		try:
-			block_io.get_new_address(label=username)
-			sendMsg("@"+username+" you are now registered.",chatid)
+			a = block_io.get_new_address(label=username+"00")
+			sendMsg("@"+username+" you are now registered.\nYour Address : <code>"+str(a['data']['address'])+"</code>",chatid)
 		except:
 			sendMsg("@"+username+" you are already registered.",chatid)
+
+# /work
+	elif "/work" in message[0]:
+		repos = ['peakshift/telegram-dogecoin']
+		g = Github(access_token)
+		msg1 = ""
+		for rep in repos:
+			repo = g.get_repo(rep)
+			open_issues = repo.get_issues()
+			a = 0
+			msg1 += "\n<b>"+str(repo.full_name)+"</b>\n\n"
+			for issue in open_issues:
+				a += 1
+				for x in issue.labels:
+					if x.name == "reward":
+						open_issues = repo.get_issue(number=int(issue.number))
+						one = md.parse(open_issues.body)
+						ym = yaml.safe_load(one[0].content)
+						ymm = json.loads(json.dumps(ym, default = myconverter))
+						msg1 += "<code>#"+str(issue.number)+" > "+str(issue.title)+"</code> -- "+str(ym['Reward'])+" 💰\n"
+		msg1 += "\n\n-> Use /body_[issue_number] , Example : <code>/body_13</code>"
+		sendMsg(msg1,chatid)
+
+# /body
+	elif "/body" in message[0]:
+		spl = str(message[0]).split("_")
+		if spl[1] != None:
+			#sendMsg(spl[1],chatid)
+			g = Github(access_token)
+			repo = g.get_repo('peakshift/telegram-dogecoin')
+			open_issues = repo.get_issue(number=int(spl[1]))
+			#one = md.parse(open_issues.body)
+			sendMsg(open_issues.body,chatid,"markdown")
+		else:
+			sendMsg("null",chatid)
+
 # /balance
 	elif "/balance" in message[0]:
 		try:
 			(balance, pending_balance) = returnBal(username)
-			sendMsg("@"+username+" Balance : "+balance+ " Doge ("+pending_balance+" Doge)",chatid)
+			sendMsg("@"+username+" Balance : "+balance+ "Doge ("+pending_balance+" Doge)",chatid)
 		except:
 			sendMsg("@"+username+" you are not registered yet. use /register to register.",chatid)
+
 # /tip
 	elif "/tip" in message[0]:
 		try:
@@ -89,11 +150,12 @@ def process(message,firstname,username,chatid):
 					("" if monikers_dict.get(message[3], 0) == 0 else f" ({str(amount)} doge)") +
 					" to @"+person+"",chatid)
 			(balance, pending_balance) = returnBal(person)
-			sendMsg("@"+person+" Balance : "+math.floor(balance)+ "Doge ("+math.floor(pending_balance)+" Doge)",chatid)
+			sendMsg("@"+person+" Balance : "+balance+ "Doge ("+pending_balance+" Doge)",chatid)
 		except ValueError:
 			sendMsg("@"+username+" invalid amount.",chatid)
 		except:
 			sendMsg("@"+username+" insufficient balance or @"+person+" is not registered yet.",chatid)
+
 # /address
 	elif "/address" in message[0]:
 		try:
@@ -101,6 +163,7 @@ def process(message,firstname,username,chatid):
 			sendMsg("@"+username+" your address is "+data['data']['address']+"",chatid)
 		except:
 			sendMsg("@"+username+" you are not registered yet. use /register to register.",chatid)
+
 # /withdraw
 	elif "/withdraw" in message[0]:
 		try:
@@ -111,6 +174,7 @@ def process(message,firstname,username,chatid):
 			sendMsg("@"+username+" invalid amount.",chatid)
 		except:
 			sendMsg("@"+username+" insufficient balance or you are not registered yet.",chatid)
+
 # /rain
 	elif "/rain" in message[0]:
 		try:
@@ -131,11 +195,13 @@ def process(message,firstname,username,chatid):
 				sendMsg("@"+name+" is raining on "+','.join(users)+"",chatid)
 		except:
 			pass
+
 # /monikers
 	elif "/monikers" in message:
 		sendMsg("--MONIKERS--\n" +
 			monikers_str,chatid)
 
+# /active
 	elif "/active" in message:
 		sendMsg("Current active : %d shibes" %(len(getCount(chatid))),chatid)
 	else:
@@ -148,7 +214,7 @@ def process(message,firstname,username,chatid):
 
 while True:
 	try:
-		print("such dogeshift. much running. ",time.time())
+		print("such dogeshift. much running. ")
 		data = requests.get(url+"getUpdates", data={"offset":n}).json()
 		n = data["result"][0]["update_id"] + 1
 		try:
@@ -163,6 +229,5 @@ while True:
 		chatid = data["result"][0]["message"]["chat"]["id"]
 		message = data["result"][0]["message"]["text"]
 		process(message,firstname,username,chatid)
-	except Exception as e:
-		#print("Error : 141 : "+str(e))
+	except:
 		pass
