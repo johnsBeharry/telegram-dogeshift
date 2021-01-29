@@ -9,7 +9,6 @@ import yaml
 import datetime
 import pprint
 from markdown_it import MarkdownIt
-from markdown_it.extensions.front_matter import front_matter_plugin
 from markdown_it.extensions.footnote import footnote_plugin
 
 os.system('clear')
