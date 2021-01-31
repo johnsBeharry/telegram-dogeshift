@@ -21,7 +21,7 @@ Further bot  documentation [link](https://core.telegram.org/bots#6-botfather)
 2. Click on [Developer Settings](https://github.com/settings/apps)
 3. Click on [Persoanl Access Tokens](https://github.com/settings/tokens)
 4. Here `Generate a New Token`.
-4. Give it a Name and all the Permissions and click on `Generate Token`.
+4. Give it a Name and give it Permissions of `repo` and click on `Generate Token`.
 5. Your token will look like : `g96641055hua1d959e2112232225f77c89182a794a`
 
 # Getting Started

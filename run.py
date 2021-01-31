@@ -7,7 +7,6 @@ import json
 from github import Github
 import yaml
 import datetime
-import pprint
 from markdown_it import MarkdownIt
 
 
