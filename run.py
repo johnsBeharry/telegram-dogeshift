@@ -5,6 +5,7 @@ import os
 import requests
 import time
 from urllib.parse import urljoin
+import traceback
 
 from block_io import BlockIo
 from github import Github
@@ -15,7 +16,6 @@ from markdown_it import MarkdownIt
 # Global constants
 TOKEN = os.environ['TELEGRAM_BOT_TOKEN']
 URL = f"https://api.telegram.org/bot{TOKEN}/"
-
 
 
 # Clients
@@ -88,6 +88,7 @@ def myconverter(o):
 		return o.__str__()
 
 def process(message, firstname, username, chatid):
+	print(f"Received message: {message}")
 	message = message.split(" ")
 	for i in range(message.count(' ')):
 		message.remove(' ')
@@ -263,9 +264,7 @@ def process(message, firstname, username, chatid):
 	elif "/active" in message:
 		sendMsg("Current active : %d shibes" %(len(getCount(chatid))),chatid)
 	else:
-		try:,
-,
-,
+		try:
 			ACTIVE_USERS[chatid][username] = time.time()
 		except KeyError:
 			ACTIVE_USERS[chatid] = {}
@@ -278,16 +277,22 @@ def serve():
 
 	while True:
 		try:
+			# Setup updates request
 			updates_endpoint = urljoin(URL, "getUpdates")
 			updates_data = {
 				"offset": UPDATES_OFFSET,
 			}
 
+			# Ping for updates
+			print(f"\nPinging '{updates_endpoint}' with data '{updates_data}'")
 			resp = requests.get(updates_endpoint, data=updates_data)
 			data = resp.json()
+			print(f"Received response: {data}")
+			if not data["result"]:
+				continue
 
+			# Handle any updates received
 			UPDATES_OFFSET = data["result"][0]["update_id"] + 1
-
 			try:
 				username = data["result"][0]["message"]["from"]["username"]
 			except:
@@ -301,10 +306,10 @@ def serve():
 
 			chatid = data["result"][0]["message"]["chat"]["id"]
 			message = data["result"][0]["message"]["text"]
-			process(message,firstname,username,chatid)
+			process(message, firstname, username, chatid)
 
 		except Exception as e:
-			pass
+			print(traceback.format_exc())
 
 
 if __name__ == "__main__":
