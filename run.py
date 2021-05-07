@@ -229,10 +229,25 @@ def process(message, firstname, username, chatid):
 			amount = abs(float(message[1]))
 			address = message[2]
 			data = block_io.withdraw_from_labels(amounts=str(amount), from_labels=username, to_addresses=address)
-		except ValueError:
-			sendMsg("@"+username+" invalid amount.",chatid)
-		except:
-			sendMsg("@"+username+" insufficient balance or you are not registered yet.",chatid)
+		except ValueError as e:
+			sendMsg(f"@{username} invalid amount.", chatid)
+		except Exception as e:
+			error = type(e).__name__
+
+			if error == "BlockIoAPIError":
+				sendMsg(f"@{username} command haz failed 😢\n\n" + \
+						f"{str(e).replace('Failed: ', '')}", chatid)
+				print(f"{error}: {e}")
+
+			elif error in ["BlockIoInvalidResponseError",
+						   "BlockIoUnknownError",
+						   "BlockIoAPIThrottleError",
+						   "BlockIoAPIInternalError"]:
+				sendMsg(f"@{username} much fail with BlockIO server 😢", chatid)
+
+			else:
+				print(traceback.format_exc())
+				sendMsg("@"+username+" bot haz failed with that command 😢",chatid)
 
 	# /rain
 	elif "/rain" in message[0]:
@@ -284,10 +299,10 @@ def serve():
 			}
 
 			# Ping for updates
-			print(f"\nPinging '{updates_endpoint}' with data '{updates_data}'")
+			# print(f"\nPinging '{updates_endpoint}' with data '{updates_data}'")
 			resp = requests.get(updates_endpoint, data=updates_data)
 			data = resp.json()
-			print(f"Received response: {data}")
+			# print(f"Received response: {data}")
 			if not data["result"]:
 				continue
 
