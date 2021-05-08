@@ -6,6 +6,7 @@ import requests
 import time
 from urllib.parse import urljoin
 import traceback
+import re
 
 from block_io import BlockIo
 from github import Github
@@ -226,11 +227,26 @@ def process(message, firstname, username, chatid):
 	# /withdraw
 	elif "/withdraw" in message[0]:
 		try:
+			kwargs = {}
 			amount = abs(float(message[1]))
 			address = message[2]
-			data = block_io.withdraw_from_labels(amounts=str(amount), from_labels=username, to_addresses=address)
+			kwargs = {
+				"amounts": str(amount),
+				"from_labels": username,
+				"to_addresses": address,
+			}
+
+			fee_regex = re.search(r'fee=(\d+.?\d*)', ' '.join(message))
+			if fee_regex:
+				kwargs['priority'] = 'custom'
+				kwargs['custom_network_fee'] = fee_regex.group(1)
+
+			print(kwargs)
+			data = block_io.withdraw_from_labels(**kwargs)
+
 		except ValueError as e:
 			sendMsg(f"@{username} invalid amount.", chatid)
+
 		except Exception as e:
 			error = type(e).__name__
 
@@ -302,25 +318,27 @@ def serve():
 			# print(f"\nPinging '{updates_endpoint}' with data '{updates_data}'")
 			resp = requests.get(updates_endpoint, data=updates_data)
 			data = resp.json()
-			# print(f"Received response: {data}")
-			if not data["result"]:
+			if not data.get("result"):
 				continue
 
 			# Handle any updates received
+			print(f"---\nReceived response: {data}")
 			UPDATES_OFFSET = data["result"][0]["update_id"] + 1
+
+			message_obj = data["result"][0].get("message") or data["result"][0].get("edited_message")
 			try:
-				username = data["result"][0]["message"]["from"]["username"]
+				username = message_obj["from"]["username"]
 			except:
 				username = "UnKnown uname"
 
 			try:
-				firstname = data["result"][0]["message"]["from"]["first_name"]
+				firstname = message_obj["from"]["first_name"]
 			except Exception as e:
 				print(e)
 				firstname = "Unknown name"
 
-			chatid = data["result"][0]["message"]["chat"]["id"]
-			message = data["result"][0]["message"]["text"]
+			chatid = message_obj["chat"]["id"]
+			message = message_obj["text"]
 			process(message, firstname, username, chatid)
 
 		except Exception as e:
